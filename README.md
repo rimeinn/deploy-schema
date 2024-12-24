@@ -8,6 +8,9 @@
 * schema-list 可选，每行一个 default.custom.yaml 中启用的方案。当且仅当您的方案自带 default.yaml 时省略此项。
 * package-items：可选，打包进 zip 的项，默认为 build。
 
+## 产物
+/tmp/deploy-schema/artifact.zip，可直接用于 `loadZip`。
+
 ## 示例
 
 [雾凇拼音](https://github.com/iDvel/rime-ice)
@@ -28,4 +31,19 @@
       lua
       opencc
       custom_phrase.txt
+```
+
+[朙月拼音](https://github.com/rime/rime-luna-pinyin)和[五笔画](https://github.com/rime/rime-luna-pinyin)
+```yaml
+- name: Build luna-pinyin and stroke
+  uses: rimeinn/deploy-schema@master
+  with:
+    user-recipe-list: |-
+      luna-pinyin
+      stroke
+    # 依赖 prelude 和 essay，省略 shared-recipe-list
+    schema-list:
+      luna_pinyin
+      stroke
+    # 只打包 build，省略 package-items
 ```
