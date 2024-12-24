@@ -36,9 +36,9 @@ runs:
         done <<< "${{ inputs.shared-recipe-list }}"
         cd user
         while IFS= read -r line; do
-          rime-deployer --add-schema $line
+          rime_deployer --add-schema $line
         done <<< "${{ inputs.schema-list }}"
-        rime-deployer --build . ../shared build
+        rime_deployer --build . ../shared build
         package_items_list=""
         while IFS= read -r line; do
           package_items_list="$package_items_list $line"
