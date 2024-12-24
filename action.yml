@@ -1,0 +1,50 @@
+name: Deploy schema
+
+inputs:
+  user-recipe-list:
+    required: true
+
+  shared-recipe-list:
+    required: false
+    default: |-
+      essay
+      prelude
+
+  schema-list:
+    required: false
+    default:
+
+  package-items:
+    required: false
+    default: |-
+      build
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        sudo apt install -y --no-install-recommends librime-bin
+        mkdir /tmp/deploy-schema && cd /tmp/deploy-schema
+        mkdir user shared
+        git clone --depth=1 https://github.com/rime/plum
+        while IFS= read -r line; do
+          rime_dir=/tmp/deploy-schema/user plum/rime-install $line
+        done <<< "${{ inputs.user-recipe-list }}"
+        if [[ ! -z "${{ inputs.shared-recipe-list }}" ]]; then
+          while IFS= read -r line; do
+            rime_dir=/tmp/deploy-schema/shared plum/rime-install $line
+          done <<< "${{ inputs.shared-recipe-list }}"
+        fi
+        cd user
+        if [[ ! -z "${{ inputs.schema-list }}" ]]; then
+          while IFS= read -r line; do
+            rime_deployer --add-schema $line
+          done <<< "${{ inputs.schema-list }}"
+        fi
+        rime_deployer --build . ../shared build
+        package_items_list=""
+        while IFS= read -r line; do
+          package_items_list="$package_items_list $line"
+        done <<< "${{ inputs.package-items }}"
+        zip -r ../artifact.zip $package_items_list
