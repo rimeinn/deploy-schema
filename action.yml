@@ -31,13 +31,13 @@ runs:
         while IFS= read -r line; do
           rime_dir=/tmp/deploy-schema/user plum/rime-install $line
         done <<< "${{ inputs.user-recipe-list }}"
-        if [[ ! -z "${{ inputs.shared-recipe-list }}" ]]
+        if [[ ! -z "${{ inputs.shared-recipe-list }}" ]]; then
           while IFS= read -r line; do
             rime_dir=/tmp/deploy-schema/shared plum/rime-install $line
           done <<< "${{ inputs.shared-recipe-list }}"
         fi
         cd user
-        if [[ ! -z "${{ inputs.schema-list }}" ]]
+        if [[ ! -z "${{ inputs.schema-list }}" ]]; then
           while IFS= read -r line; do
             rime_deployer --add-schema $line
           done <<< "${{ inputs.schema-list }}"
