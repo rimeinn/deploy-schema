@@ -18,7 +18,7 @@ jobs:
         run: echo "LIBRIME_VERSION=$(cat .librime-version)" >> $GITHUB_ENV
 
       - name: Checkout librime
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: rime/librime
           ref: ${{ env.LIBRIME_VERSION }}
@@ -35,7 +35,7 @@ jobs:
           g++ -I src -I build/src -o ${{ matrix.binary_name }} tools/rime_deployer.cc build/lib/librime.a -lmarisa -lleveldb -lopencc -lyaml-cpp
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.binary_name }}
           path: ${{ matrix.binary_name }}
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           merge-multiple: true
 
